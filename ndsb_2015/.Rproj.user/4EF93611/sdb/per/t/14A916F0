@@ -1,0 +1,17 @@
+{
+    "contents" : "library(\"EBImage\")\nworking_file <- paste(\"c://data/plankton/train/acantharia_protist/2441.jpg\",sep=\"\") #\"101260.jpg\"\nimg <- readImage(working_file)\nim(img)\n\nimgT <- img < mean(img) # threshold at mean\nimgT2 <- img < median(img) # threshold at median\nimgT3 <- thresh(img, offset=0.01)\n\nfhi = matrix(1, nc=3, nr=3)\nfhi[2,2] = -8\nimgfhi = filter2(img, fhi)\n\nkern = makeBrush(5, shape='diamond')\nimgD <- dilate(img, kern)\nimgE <- erode(img, kern)\n\n\nlblT <- bwlabel(imgT)\nlbl2 <- bwlabel(img < 0.98)\nlbl3 <- bwlabel(imgT3)\n\n### method similar to https://www.kaggle.com/c/datasciencebowl/details/tutorial\n# img2 <- thresh(img, w=30, h=30, offset=0.02)\n# img2 <- thresh(img)\nimg2 <- img > mean(img)\nimg2 <- ifelse(img2 == TRUE, 0, 1)\nkern = makeBrush(3, shape='diamond')\n# img22 <- dilate(erode(img2, kern), kern)\nimg22 <- dilate(img2, kern)\nimg2LBL <- bwlabel(img22)\nim(img2LBL)\ncat('Number of parts=', max(img2LBL),'\\n')\n\nfor(i in 1:max(img2LBL)){\n  im(img2LBL == i)\n}\n\nimg3 <- img2LBL == 1\nextract_stats(img3) # processed\nextract_stats(img) # original\n",
+    "created" : 1421245330751.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "940737189",
+    "id" : "14A916F0",
+    "lastKnownWriteTime" : 1421252141,
+    "path" : "C:/Users/matthew_harris/Dropbox/GitHub/plankton_NDSB/image processing test.R",
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}
